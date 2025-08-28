@@ -18,7 +18,7 @@ ALLOWED_EXTENSIONS = {'mp3', 'wav', 'm4a', 'ogg', 'flac', 'aac', 'opus'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def load_whisper_model(model_size="tiny"):
+def load_whisper_model(model_size="base"):
     global model
     try:
         print(f"Carregando modelo {model_size}...")
@@ -74,7 +74,9 @@ def transcribe():
             audio_path, 
             language=lang_param, 
             beam_size=beam_size,
-            word_timestamps=True
+            word_timestamps=True,
+            vad_filter=True,
+            vad_parameters=dict(min_silence_duration_ms=500)
         )
         
         # Processar segmentos
@@ -140,9 +142,9 @@ def download(format):
             mimetype='text/srt'
         )
 
-# Carregar modelo tiny na inicialização
-print("Carregando modelo Whisper tiny...")
-load_whisper_model("tiny")
+# Carregar modelo base na inicialização
+print("Carregando modelo Whisper base...")
+load_whisper_model("base")
 print("Servidor Flask iniciado!")
 
 if __name__ == '__main__':
