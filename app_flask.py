@@ -29,7 +29,12 @@ def load_whisper_model(model_size="medium"):
 
 @app.route('/')
 def index():
+    print("Rota / acessada")
     return render_template('index.html')
+
+@app.route('/health')
+def health():
+    return {'status': 'ok', 'model_loaded': model is not None}
 
 @app.route('/transcribe', methods=['POST'])
 def transcribe():
@@ -132,10 +137,11 @@ def download(format):
             mimetype='text/srt'
         )
 
+# Carregar modelo na inicialização
+print("Carregando modelo Whisper...")
+load_whisper_model()
+print("Modelo carregado com sucesso!")
+
 if __name__ == '__main__':
-    # Carregar modelo padrão
-    print("Carregando modelo Whisper...")
-    load_whisper_model()
-    print("Servidor iniciado!")
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)

@@ -21,4 +21,4 @@ COPY . .
 EXPOSE 5000
 
 # Comando para iniciar a aplicação
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "1", "--timeout", "300", "wsgi:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "1", "--timeout", "300", "--log-level", "info", "wsgi:app"]
