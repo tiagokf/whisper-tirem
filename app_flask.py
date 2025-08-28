@@ -140,9 +140,12 @@ def download(format):
             mimetype='text/srt'
         )
 
-# Modelo será carregado sob demanda para economizar memória
-print("Servidor Flask iniciado - modelo será carregado sob demanda")
+# Carregar modelo tiny na inicialização
+print("Carregando modelo Whisper tiny...")
+load_whisper_model("tiny")
+print("Servidor Flask iniciado!")
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    print(f"Iniciando servidor na porta {port}")
+    app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
