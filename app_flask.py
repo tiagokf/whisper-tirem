@@ -157,6 +157,8 @@ load_whisper_model("small")
 print("Servidor Flask iniciado!")
 
 if __name__ == '__main__':
+    # Para desenvolvimento local
     port = int(os.environ.get('PORT', 5000))
-    print(f"Iniciando servidor na porta {port}")
+    print(f"Iniciando servidor de desenvolvimento na porta {port}")
+    print("AVISO: Use um servidor WSGI para produção (Gunicorn/Waitress)")
     app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
