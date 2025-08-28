@@ -18,10 +18,12 @@ ALLOWED_EXTENSIONS = {'mp3', 'wav', 'm4a', 'ogg', 'flac', 'aac', 'opus'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def load_whisper_model(model_size="medium"):
+def load_whisper_model(model_size="tiny"):
     global model
     try:
+        print(f"Carregando modelo {model_size}...")
         model = WhisperModel(model_size, device="cpu", compute_type="int8")
+        print(f"Modelo {model_size} carregado com sucesso!")
         return True
     except Exception as e:
         print(f"Erro ao carregar modelo: {e}")
@@ -55,6 +57,7 @@ def transcribe():
     
     # Carregar modelo se necessário
     if model is None or request.form.get('reload_model'):
+        print(f"Carregando modelo {model_size} para transcrição...")
         if not load_whisper_model(model_size):
             return jsonify({'error': 'Erro ao carregar modelo'}), 500
     
@@ -137,10 +140,8 @@ def download(format):
             mimetype='text/srt'
         )
 
-# Carregar modelo na inicialização
-print("Carregando modelo Whisper...")
-load_whisper_model()
-print("Modelo carregado com sucesso!")
+# Modelo será carregado sob demanda para economizar memória
+print("Servidor Flask iniciado - modelo será carregado sob demanda")
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
